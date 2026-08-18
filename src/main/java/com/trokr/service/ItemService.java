@@ -18,6 +18,18 @@ public class ItemService {
     public List<Item> listarTodos() {
         return itemRepository.findAll();
     }
+    
+    public List<Item> buscaTextualIncluirDescricao(String termo, boolean incluirDescricao) {
+        if (incluirDescricao) {
+            return itemRepository.findByTituloContainingIgnoreCaseOrDescricaoContainingIgnoreCase(termo, termo);
+        }
+
+        return itemRepository.findByTituloContainingIgnoreCase(termo);
+    }
+
+    public List<Item> buscarPorUsuarioId(Long usuarioId) {
+        return itemRepository.findByUsuarioProprietarioId(usuarioId);
+    }
 
     public Item buscarPorId(Long id) {
         return itemRepository.findById(id)

@@ -15,8 +15,12 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
 
-    public List<Usuario> listarTodos() {
-        return usuarioRepository.findAll();
+    public List<Usuario> listarTodos(String nome) {
+        if (nome.equals("")) {
+            return usuarioRepository.findAll();
+        }
+
+        return usuarioRepository.findByNomeContainingIgnoreCase(nome);
     }
 
     public Usuario buscarPorId(Long id) {

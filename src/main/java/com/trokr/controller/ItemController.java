@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,6 +29,23 @@ public class ItemController {
     @GetMapping
     public List<ItemResponseDTO> listar() {
         return itemService.listarTodos().stream()
+                .map(ItemResponseDTO::fromEntity)
+                .toList();
+    }
+
+    @GetMapping("/buscar")
+    public List<ItemResponseDTO> buscarTermo(
+        @RequestParam String termo,
+        @RequestParam(defaultValue = "false") boolean incluirDescricao
+    ) {
+        return itemService.buscaTextualIncluirDescricao(termo, incluirDescricao).stream()
+                .map(ItemResponseDTO::fromEntity)
+                .toList();
+    }
+
+    @GetMapping("/usuario/{usuarioId}")
+    public List<ItemResponseDTO> buscarPorUsuarioId(@PathVariable Long usuarioId) {
+        return itemService.buscarPorUsuarioId(usuarioId).stream()
                 .map(ItemResponseDTO::fromEntity)
                 .toList();
     }

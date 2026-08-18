@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,8 +27,8 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     @GetMapping
-    public List<UsuarioResponseDTO> listar() {
-        return usuarioService.listarTodos().stream()
+    public List<UsuarioResponseDTO> listar(@RequestParam(defaultValue = "") String nome) {
+        return usuarioService.listarTodos(nome).stream()
                 .map(UsuarioResponseDTO::fromEntity)
                 .toList();
     }
