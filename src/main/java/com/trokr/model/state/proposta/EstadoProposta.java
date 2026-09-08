@@ -1,10 +1,10 @@
-package com.trokr.model.state;
+package com.trokr.model.state.proposta;
 
 import com.trokr.model.Proposta;
-import com.trokr.model.EstadosProposta;
+import com.trokr.model.StatusProposta;
 
 public interface EstadoProposta {
-    EstadosProposta getStatus();
+    StatusProposta getStatus();
 
     // Rascunho --> Homologacao
     void enviarParaHomologacao(Proposta proposta);
