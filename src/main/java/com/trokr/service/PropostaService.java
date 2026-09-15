@@ -32,11 +32,31 @@ public class PropostaService {
         return propostaRepository.save(proposta);
     }
 
-    public Proposta atualizar(Long id, Proposta dadosAtualizados, Long usuarioId) {
+    public Proposta atualizar(Long id, Proposta dadosAtualizados) {
         Proposta propostaExistente = buscarPorId(id);
+        propostaExistente.comoRaiz().editarProposta(propostaExistente);
+
         propostaExistente.setDescricao(dadosAtualizados.getDescricao());
         propostaExistente.setItem(dadosAtualizados.getItem());
 
         return propostaRepository.save(propostaExistente);
+    }
+
+    public Proposta enviarRascunho(Long id) {
+        Proposta proposta = buscarPorId(id);
+
+        if(proposta.isRaiz()) {
+            proposta.comoRaiz().enviarParaHomologacao(proposta);
+        } else {
+            proposta.comoContra().enviarParaAnalise(proposta);
+        }
+
+        return propostaRepository.save(proposta);
+    }
+
+    public Proposta aprovar(Long id) {
+        Proposta proposta = buscarPorId(id);
+        proposta.comoRaiz().aprovarRascunho(proposta);
+        return propostaRepository.save(proposta);
     }
 }
