@@ -2,8 +2,10 @@ package com.trokr.service;
 
 import java.util.List;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import com.trokr.event.TrocaFinalizadaEvent;
 import com.trokr.exception.ResourceNotFoundException;
 import com.trokr.model.Proposta;
 import com.trokr.repository.PropostaRepository;
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PropostaService {
     private final PropostaRepository propostaRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public List<Proposta> listarPropostas() {
         return propostaRepository.findByPropostaIsNull();
@@ -57,6 +60,12 @@ public class PropostaService {
     public Proposta aprovar(Long id) {
         Proposta proposta = buscarPorId(id);
         proposta.comoRaiz().aprovarRascunho(proposta);
+        
+        // TODO: fazer certo
+        eventPublisher.publishEvent(new TrocaFinalizadaEvent(id, proposta.getUsuario()));
+
+        System.out.println("chegou até aqui");
+
         return propostaRepository.save(proposta);
     }
 }
