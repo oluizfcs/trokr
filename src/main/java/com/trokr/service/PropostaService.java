@@ -100,13 +100,14 @@ public class PropostaService {
             relacionada.comoRaiz().confirmarTroca(relacionada);
         }
 
+        // TODO: delegar para o estado
         Proposta raiz = proposta.isRaiz() ? proposta : relacionada;
         raiz.getContrapropostas().stream()
                 .filter(cp -> !cp.getId().equals(proposta.getId()))
                 .filter(PropostaService::podeSerCancelada)
                 .forEach(cp -> cp.comoContra().cancelar(cp));
 
-        eventPublisher.publishEvent(new TrocaFinalizadaEvent(id, proposta.getUsuario()));
+        notificarTrocaFinalizada();
 
         propostaRepository.saveAll(raiz.getContrapropostas());
         return propostaRepository.save(proposta);
@@ -153,5 +154,12 @@ public class PropostaService {
     private static boolean podeSerCancelada(Proposta contraproposta) {
         return contraproposta.getStatus() == StatusProposta.CP_RASCUNHO
                 || contraproposta.getStatus() == StatusProposta.CP_EM_ANALISE;
+    }
+
+    // TODO: terminar método
+    private void notificarTrocaFinalizada() {
+        // eventPublisher.publishEvent(new TrocaFinalizadaEvent(
+            
+        // ));
     }
 }

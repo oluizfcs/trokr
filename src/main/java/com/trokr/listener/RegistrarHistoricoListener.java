@@ -1,4 +1,4 @@
-package com.trokr.event.listener;
+package com.trokr.listener;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

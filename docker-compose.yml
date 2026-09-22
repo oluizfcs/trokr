@@ -4,8 +4,6 @@ services:
     container_name: trokr-db
     restart: unless-stopped
     environment:
-      # Valores de exemplo para desenvolvimento local — nunca use senhas
-      # assim fora do ambiente local da disciplina.
       POSTGRES_DB: trokr_db
       POSTGRES_USER: trokr_user
       POSTGRES_PASSWORD: changeme_local_dev
@@ -19,6 +17,18 @@ services:
       timeout: 5s
       retries: 5
 
+  mongo:
+    image: mongo:8
+    container_name: trokr-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: trokr
+      MONGO_INITDB_ROOT_PASSWORD: changeme_local_dev
+    volumes:
+      - trokr-mongo-data:/data/db
+
   app:
     build: .
     container_name: trokr-app
@@ -26,12 +36,20 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      mongo:
+        condition: service_started
     environment:
       DB_HOST: db
       DB_PORT: 5432
       DB_NAME: trokr_db
       DB_USER: trokr_user
       DB_PASSWORD: changeme_local_dev
+      MONGO_HOST: mongo
+      MONGO_PORT: 27017
+      MONGO_DATABASE: trokr
+      MONGO_USERNAME: trokr
+      MONGO_PASSWORD: changeme_local_dev
+      MONGO_AUTH_DB: admin
     ports:
       - "8090:8080"
     develop:
@@ -43,3 +61,4 @@ services:
 
 volumes:
   trokr-db-data:
+  trokr-mongo-data:
