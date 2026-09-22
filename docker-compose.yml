@@ -34,6 +34,12 @@ services:
       DB_PASSWORD: changeme_local_dev
     ports:
       - "8090:8080"
+    develop:
+      watch:
+        - action: rebuild
+          path: ./src
+        - action: rebuild
+          path: ./pom.xml
 
 volumes:
   trokr-db-data:
