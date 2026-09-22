@@ -1,11 +1,11 @@
-package com.trokr.model.state;
+package com.trokr.model.state.proposta;
 
 import com.trokr.model.Proposta;
-import com.trokr.model.EstadosProposta;
+import com.trokr.model.StatusProposta;
 
-public class EstadoNegociada implements EstadoProposta {
-    public EstadosProposta getStatus() {
-        return EstadosProposta.NEGOCIADA;
+public class EstadoAtiva implements EstadoProposta {
+    public StatusProposta getStatus() {
+        return StatusProposta.ATIVA;
     }
 
     public void enviarParaHomologacao(Proposta proposta) {
@@ -21,23 +21,22 @@ public class EstadoNegociada implements EstadoProposta {
     }
 
     public void editarProposta(Proposta proposta) {
-        throw new IllegalStateException();
+        proposta.mudarEstadoPara(new EstadoRascunho());
     }
 
     public void selecionarContraproposta(Proposta proposta) {
-        throw new IllegalStateException();
+        proposta.mudarEstadoPara(new EstadoNegociada());
     }
     
     public void desistirDaNegociacao(Proposta proposta) {
-        proposta.mudarEstadoPara(new EstadoAtiva());
+        throw new IllegalStateException();
     }
     
     public void confirmarTroca(Proposta proposta) {
-        // todo: cancelar todas as outras contrapropostas
-        proposta.mudarEstadoPara(new EstadoFinalizada());
+        throw new IllegalStateException();
     }
 
     public void cancelar(Proposta proposta) {
-        throw new IllegalStateException();
+        proposta.mudarEstadoPara(new EstadoCancelada());
     }
 }

@@ -1,11 +1,11 @@
-package com.trokr.model.state;
+package com.trokr.model.state.proposta;
 
 import com.trokr.model.Proposta;
-import com.trokr.model.EstadosProposta;
+import com.trokr.model.StatusProposta;
 
 public class EstadoFinalizada implements EstadoProposta {
-    public EstadosProposta getStatus() {
-        return EstadosProposta.FINALIZADA;
+    public StatusProposta getStatus() {
+        return StatusProposta.FINALIZADA;
     }
 
     public void enviarParaHomologacao(Proposta proposta) {
