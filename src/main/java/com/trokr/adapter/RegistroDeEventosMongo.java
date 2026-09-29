@@ -1,10 +1,13 @@
 package com.trokr.adapter;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
 import com.trokr.model.LogEvento;
+import com.trokr.model.NivelEvento;
 import com.trokr.repository.LogEventoRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -14,12 +17,15 @@ import lombok.RequiredArgsConstructor;
 public class RegistroDeEventosMongo implements RegistroDeEventos {
     private final LogEventoRepository logEventoRepository;
 
-    public void registrar(String tipo, String mensagem, Object payload) {
-        LogEvento evento = new LogEvento();
-        evento.setTipo(tipo);
-        evento.setMensagem(mensagem);
-        evento.setPayload(payload);
-        logEventoRepository.insert(evento);
+    public void registrar(
+        String tipo,
+        NivelEvento nivel,
+        String origem,
+        Map<String, Object> payload,
+        LocalDateTime timestamp,
+        Long usuarioId
+    ) {
+        logEventoRepository.insert(new LogEvento(tipo, nivel, origem, payload, timestamp, usuarioId));
     }
 
     public List<Object> buscarPorTipo(String tipo) {
