@@ -2,6 +2,7 @@ package com.trokr.controller;
 
 import com.trokr.dto.ItemRequestDTO;
 import com.trokr.dto.ItemResponseDTO;
+import com.trokr.model.CategoriaItem;
 import com.trokr.model.Item;
 import com.trokr.service.ItemService;
 import jakarta.validation.Valid;
@@ -57,9 +58,11 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<ItemResponseDTO> criar(@Valid @RequestBody ItemRequestDTO dto) {
+        // TODO: mover para ItemService
         Item item = new Item();
         item.setTitulo(dto.titulo());
         item.setDescricao(dto.descricao());
+        item.setCategoria(CategoriaItem.valueOf(dto.categoria()));
 
         Item salvo = itemService.criar(item, dto.usuarioId());
         return ResponseEntity.status(HttpStatus.CREATED).body(ItemResponseDTO.fromEntity(salvo));

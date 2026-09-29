@@ -1,5 +1,6 @@
 package com.trokr.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.context.ApplicationEventPublisher;
@@ -107,7 +108,7 @@ public class PropostaService {
                 .filter(PropostaService::podeSerCancelada)
                 .forEach(cp -> cp.comoContra().cancelar(cp));
 
-        notificarTrocaFinalizada();
+        notificarTrocaFinalizada(proposta, relacionada);
 
         propostaRepository.saveAll(raiz.getContrapropostas());
         return propostaRepository.save(proposta);
@@ -156,10 +157,14 @@ public class PropostaService {
                 || contraproposta.getStatus() == StatusProposta.CP_EM_ANALISE;
     }
 
-    // TODO: terminar método
-    private void notificarTrocaFinalizada() {
-        // eventPublisher.publishEvent(new TrocaFinalizadaEvent(
-            
-        // ));
+    private void notificarTrocaFinalizada(Proposta a, Proposta b) {
+        eventPublisher.publishEvent(new TrocaFinalizadaEvent(
+            a.getId(),
+            a.getUsuario(),
+            b.getUsuario(),
+            a.getItem(),
+            b.getItem(),
+            LocalDateTime.now()
+        ));
     }
 }
