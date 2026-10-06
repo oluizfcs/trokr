@@ -50,6 +50,7 @@ services:
       MONGO_USERNAME: trokr
       MONGO_PASSWORD: changeme_local_dev
       MONGO_AUTH_DB: admin
+      TROKR_DEMO_ATRASOMS: 2000
     ports:
       - "8090:8080"
     develop:

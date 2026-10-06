@@ -35,6 +35,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PostLoad;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -82,6 +83,9 @@ public class Proposta {
 
     @Transient
     private EstadoContraproposta statusContraproposta;
+
+    @Version
+    private Long versao;
 
     public void inicializarProposta() {
         status = StatusProposta.RASCUNHO;

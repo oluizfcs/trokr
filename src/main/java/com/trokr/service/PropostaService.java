@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.trokr.config.AtrasoDemo;
 import com.trokr.event.TrocaFinalizadaEvent;
 import com.trokr.exception.ResourceNotFoundException;
 import com.trokr.model.Proposta;
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class PropostaService {
     private final PropostaRepository propostaRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final AtrasoDemo atrasoDemo;
 
     public List<Proposta> listarPropostasAtivas() {
         return propostaRepository.findByPropostaIsNull().stream()
@@ -107,6 +109,8 @@ public class PropostaService {
                 .filter(cp -> !cp.getId().equals(proposta.getId()))
                 .filter(PropostaService::podeSerCancelada)
                 .forEach(cp -> cp.comoContra().cancelar(cp));
+
+        atrasoDemo.aplicar();
 
         notificarTrocaFinalizada(proposta, relacionada);
 

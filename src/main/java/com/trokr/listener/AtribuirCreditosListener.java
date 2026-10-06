@@ -2,9 +2,9 @@ package com.trokr.listener;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.trokr.event.TrocaFinalizadaEvent;
-import com.trokr.model.Usuario;
 import com.trokr.repository.UsuarioRepository;
 import com.trokr.service.credito.CalculadoraCreditoService;
 
@@ -17,15 +17,16 @@ public class AtribuirCreditosListener {
     private final CalculadoraCreditoService calculadora;
     private final UsuarioRepository usuarioRepository;
 
+    @Transactional
     @EventListener 
     public void aoFinalizarTroca(TrocaFinalizadaEvent evento) {
-        Usuario usuarioA = evento.getUsuarioA();
-        Usuario usuarioB = evento.getUsuarioB();
+        Long idUsuarioA = evento.getUsuarioA().getId();
+        Long idUsuarioB = evento.getUsuarioB().getId();
 
-        usuarioA.adicionarCreditos(calculadora.calcular(evento.getItemA()));
-        usuarioB.adicionarCreditos(calculadora.calcular(evento.getItemB()));
+        int creditosA = calculadora.calcular(evento.getItemA());
+        int creditosB = calculadora.calcular(evento.getItemB());
 
-        usuarioRepository.save(usuarioA);
-        usuarioRepository.save(usuarioB);
+        usuarioRepository.adicionarCreditos(idUsuarioA, creditosA);
+        usuarioRepository.adicionarCreditos(idUsuarioB, creditosB);
     }
 }

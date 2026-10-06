@@ -43,8 +43,4 @@ public class Usuario {
 
     @Column(nullable = false)
     private Integer saldoCreditos = 0;
-
-    public void adicionarCreditos(int creditos) {
-        saldoCreditos += creditos;
-    }
 }

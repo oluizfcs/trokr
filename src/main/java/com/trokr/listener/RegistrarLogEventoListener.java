@@ -3,8 +3,9 @@ package com.trokr.listener;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import com.trokr.event.TrocaFinalizadaEvent;
 import com.trokr.service.LogEventoService;
@@ -17,7 +18,7 @@ public class RegistrarLogEventoListener {
     
     private final LogEventoService logEventoService;
 
-    @EventListener 
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void aoFinalizarTroca(TrocaFinalizadaEvent evento) {
         Map<String, Object> payload = new HashMap<>();
         
