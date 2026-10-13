@@ -38,13 +38,17 @@ public class Avaliacao {
     @JoinColumn(name = "usuario_avaliado_id", nullable = false)
     private Usuario usuarioAvaliado;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "proposta_id", nullable = false)
+    private Proposta proposta;
+
     @Enumerated(EnumType.STRING)
     private StatusAvaliacao status;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private int nota;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String descricao;
 
     @CreationTimestamp

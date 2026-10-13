@@ -10,6 +10,6 @@ public class EnviarEmailListener {
     
     @EventListener 
     public void aoFinalizarTroca(TrocaFinalizadaEvent evento) {
-        // System.out.println("O usuário " + evento.getUsuarioFinalizou().getNome() + " finalizou a troca de id: " + evento.getPropostaId());
+        System.out.println("O usuário " + evento.getUsuarioA().getNome() + " finalizou a troca de id: " + evento.getPropostaId());
     }
 }
