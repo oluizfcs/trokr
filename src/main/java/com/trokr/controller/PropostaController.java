@@ -44,51 +44,51 @@ public class PropostaController {
                 .toList();
     }
 
-    @GetMapping("/{id}/enviar")
+    @PostMapping("/{id}/enviar")
     public ResponseEntity<Void> enviarRascunho(@PathVariable Long id) {
         propostaService.enviarRascunho(id);
         return ResponseEntity.ok().build();
     }
 
     // TODO: verificar se usuário é admin
-    @GetMapping("/{id}/aprovar")
+    @PostMapping("/{id}/aprovar")
     public ResponseEntity<Void> aprovarProposta(@PathVariable Long id) {
         propostaService.aprovar(id);
         return ResponseEntity.ok().build();
     }
 
     // TODO: verificar se usuário é admin
-    @GetMapping("/{id}/reprovar")
+    @PostMapping("/{id}/reprovar")
     public ResponseEntity<Void> reprovarProposta(@PathVariable Long id) {
         propostaService.reprovar(id);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{id}/selecionar/{contraId}")
+    @PostMapping("/{id}/selecionar/{contraId}")
     public ResponseEntity<Void> selecionarContraproposta(@PathVariable Long id, @PathVariable Long contraId) {
         propostaService.selecionarContraproposta(id, contraId);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{id}/confirmar")
+    @PostMapping("/{id}/confirmar")
     public ResponseEntity<Void> confirmarTroca(@PathVariable Long id) {
         propostaService.confirmarTroca(id);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{id}/cancelar")
+    @PostMapping("/{id}/cancelar")
     public ResponseEntity<Void> cancelar(@PathVariable Long id) {
         propostaService.cancelar(id);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{id}/desistir")
+    @PostMapping("/{id}/desistir")
     public ResponseEntity<Void> desistir(@PathVariable Long id) {
         propostaService.desistir(id);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{id}/recusar")
+    @PostMapping("/{id}/recusar")
     public ResponseEntity<Void> recusar(@PathVariable Long id) {
         propostaService.recusar(id);
         return ResponseEntity.ok().build();
