@@ -33,7 +33,11 @@ public class EstadoNegociada implements EstadoProposta {
     }
     
     public void confirmarTroca(Proposta proposta) {
-        // todo: cancelar todas as outras contrapropostas
+        Long contrapropostaId = proposta.propostaRelacionada().getId();
+        proposta.getContrapropostas().stream()
+            .filter(cp -> !cp.getId().equals(contrapropostaId))
+            .forEach(cp -> cp.comoContra().cancelar(cp));
+        
         proposta.mudarEstadoPara(new EstadoFinalizada());
     }
 

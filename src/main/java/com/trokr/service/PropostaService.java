@@ -103,42 +103,30 @@ public class PropostaService {
         if(proposta.isRaiz()) {
             proposta.comoRaiz().confirmarTroca(proposta);
             relacionada.comoContra().confirmarTroca(relacionada);
+
+            proposta.getContrapropostas().stream()
+            .filter(cp -> cp.getStatus() == StatusProposta.CP_CANCELADA)
+            .forEach(cp -> propostaRepository.save(cp));
         } else {
             proposta.comoContra().confirmarTroca(proposta);
             relacionada.comoRaiz().confirmarTroca(relacionada);
         }
 
-        // TODO: delegar para o estado
-        Proposta raiz = proposta.isRaiz() ? proposta : relacionada;
-        raiz.getContrapropostas().stream()
-                .filter(cp -> !cp.getId().equals(proposta.getId()))
-                .filter(PropostaService::podeSerCancelada)
-                .forEach(cp -> cp.comoContra().cancelar(cp));
-
         atrasoDemo.aplicar();
-
         notificarTrocaFinalizada(proposta, relacionada);
-
-        propostaRepository.saveAll(raiz.getContrapropostas());
         return propostaRepository.save(proposta);
     }
 
-    @Transactional
+    // TODO: cancelar contrapropostas?
     public Proposta cancelar(Long id) {
         Proposta proposta = buscarPorId(id);
 
         if(proposta.isRaiz()) {
             proposta.comoRaiz().cancelar(proposta);
-            proposta.getContrapropostas().stream()
-                    .filter(PropostaService::podeSerCancelada)
-                    .forEach(cp -> cp.comoContra().cancelar(cp));
-
-            propostaRepository.saveAll(proposta.getContrapropostas());
             return propostaRepository.save(proposta);
         }
 
         proposta.comoContra().cancelar(proposta);
-
         return propostaRepository.save(proposta);
     }
 
@@ -159,11 +147,6 @@ public class PropostaService {
         }
 
         return propostaRepository.save(contraproposta);
-    }
-
-    private static boolean podeSerCancelada(Proposta contraproposta) {
-        return contraproposta.getStatus() == StatusProposta.CP_RASCUNHO
-                || contraproposta.getStatus() == StatusProposta.CP_EM_ANALISE;
     }
 
     private void notificarTrocaFinalizada(Proposta a, Proposta b) {
