@@ -16,6 +16,11 @@ import com.trokr.repository.PropostaRepository;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Esta Facade é responsável por consultar no propostaRepository ou delegar as
+ * trocas de estado para as respectivas classes lidarem com as regras de negócio
+ * e depois utiliza o propostaRepository para solicitar a persistência dos dados.
+ */
 @Service
 @RequiredArgsConstructor
 public class PropostaService {
