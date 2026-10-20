@@ -1,5 +1,6 @@
 package com.trokr.model.state.contraproposta;
 
+import com.trokr.exception.TransicaoInvalidaException;
 import com.trokr.model.Proposta;
 import com.trokr.model.StatusProposta;
 
@@ -9,7 +10,7 @@ public class EstadoCPEmAnalise implements EstadoContraproposta {
     }
 
     public void enviarParaAnalise(Proposta contraproposta) {
-        throw new IllegalStateException();
+        throw new TransicaoInvalidaException(contraproposta.getStatus().toString() + " Não pode passar para EM_ANALISE");
     }
 
     public void aceitarContraproposta(Proposta contraproposta) {
@@ -21,11 +22,11 @@ public class EstadoCPEmAnalise implements EstadoContraproposta {
     }
 
     public void confirmarTroca(Proposta contraproposta) {
-        throw new IllegalStateException();
+        throw new TransicaoInvalidaException(contraproposta.getStatus().toString() + " Não pode passar para FINALIZADA");
     }
 
     public void recusarTroca(Proposta contraproposta) {
-        throw new IllegalStateException();
+        throw new TransicaoInvalidaException(contraproposta.getStatus().toString() + " Não pode passar para RECUSADA");
     }
 
     public void cancelar(Proposta contraproposta) {

@@ -32,4 +32,9 @@ public class HelloController {
         .map(LogEventoResponseDTO::fromDocumento)
         .toList();
     }
+
+    @GetMapping("/erro")
+    public Void lancarErro() {
+        throw new RuntimeException("teste");
+    }
 }
