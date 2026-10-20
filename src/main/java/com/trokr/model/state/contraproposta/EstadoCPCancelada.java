@@ -10,26 +10,26 @@ public class EstadoCPCancelada implements EstadoContraproposta {
     }
 
     public void enviarParaAnalise(Proposta contraproposta) {
-        throw new TransicaoInvalidaException(contraproposta.getStatus().toString() + " Não pode passar para EM_ANALISE");
+        throw new TransicaoInvalidaException(contraproposta.getStatus() + " Não pode passar para " + StatusProposta.CP_EM_ANALISE);
     }
 
     public void aceitarContraproposta(Proposta contraproposta) {
-        throw new TransicaoInvalidaException(contraproposta.getStatus().toString() + " Não pode passar para NEGOCIADA");
+        throw new TransicaoInvalidaException(contraproposta.getStatus() + " Não pode passar para " + StatusProposta.CP_NEGOCIADA);
     }
 
     public void recusarContraproposta(Proposta contraproposta) {
-        throw new TransicaoInvalidaException(contraproposta.getStatus().toString() + " Não pode passar para RECUSADA");
+        throw new TransicaoInvalidaException(contraproposta.getStatus() + " Não pode passar para " + StatusProposta.CP_RECUSADA);
     }
 
     public void confirmarTroca(Proposta contraproposta) {
-        throw new TransicaoInvalidaException(contraproposta.getStatus().toString() + " Não pode passar para FINALIZADA");
+        throw new TransicaoInvalidaException(contraproposta.getStatus() + " Não pode passar para " + StatusProposta.CP_FINALIZADA);
     }
 
     public void recusarTroca(Proposta contraproposta) {
-        throw new TransicaoInvalidaException(contraproposta.getStatus().toString() + " Não pode passar para RECUSADA");
+        throw new TransicaoInvalidaException(contraproposta.getStatus() + " Não pode passar para " + StatusProposta.CP_RECUSADA);
     }
 
     public void cancelar(Proposta contraproposta) {
-        throw new TransicaoInvalidaException(contraproposta.getStatus().toString() + " Não pode passar para CANCELADA");
+        throw new TransicaoInvalidaException(contraproposta.getStatus() + " Não pode passar para " + StatusProposta.CP_CANCELADA);
     }
 }

@@ -10,7 +10,7 @@ public class EstadoCPEmAnalise implements EstadoContraproposta {
     }
 
     public void enviarParaAnalise(Proposta contraproposta) {
-        throw new TransicaoInvalidaException(contraproposta.getStatus().toString() + " Não pode passar para EM_ANALISE");
+        throw new TransicaoInvalidaException(contraproposta.getStatus() + " Não pode passar para " + StatusProposta.CP_EM_ANALISE);
     }
 
     public void aceitarContraproposta(Proposta contraproposta) {
@@ -22,11 +22,11 @@ public class EstadoCPEmAnalise implements EstadoContraproposta {
     }
 
     public void confirmarTroca(Proposta contraproposta) {
-        throw new TransicaoInvalidaException(contraproposta.getStatus().toString() + " Não pode passar para FINALIZADA");
+        throw new TransicaoInvalidaException(contraproposta.getStatus() + " Não pode passar para " + StatusProposta.CP_FINALIZADA);
     }
 
     public void recusarTroca(Proposta contraproposta) {
-        throw new TransicaoInvalidaException(contraproposta.getStatus().toString() + " Não pode passar para RECUSADA");
+        throw new TransicaoInvalidaException(contraproposta.getStatus() + " Não pode passar para " + StatusProposta.CP_RECUSADA);
     }
 
     public void cancelar(Proposta contraproposta) {
