@@ -1,21 +1,23 @@
 package com.trokr.model;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 
 /**
@@ -28,12 +30,13 @@ import org.hibernate.annotations.CreationTimestamp;
  * dois itens: cada Item apenas existe e pertence a um usuário por enquanto.
  */
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "categoria", discriminatorType = DiscriminatorType.STRING)
 @Table(name = "item")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class Item {
+@SuperBuilder
+public abstract class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,10 +48,6 @@ public class Item {
     @Column(nullable = false)
     private String descricao;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private CategoriaItem categoria;
-
     // Relação unidirecional de propósito: Item conhece seu dono, mas Usuario
     // não mantém uma coleção de itens. Evita decisões de cascade/fetch que
     // ainda não fazem sentido discutir nesta fase do curso.
@@ -59,4 +58,6 @@ public class Item {
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime dataCriacao;
+
+    public abstract CategoriaItem getCategoria();
 }

@@ -2,9 +2,13 @@ package com.trokr.controller;
 
 import com.trokr.dto.ItemRequestDTO;
 import com.trokr.dto.ItemResponseDTO;
+import com.trokr.factory.FactoryCatalog;
 import com.trokr.model.CategoriaItem;
 import com.trokr.model.Item;
+import com.trokr.model.Usuario;
 import com.trokr.service.ItemService;
+import com.trokr.service.UsuarioService;
+
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +30,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class ItemController {
 
     private final ItemService itemService;
+    private final UsuarioService usuarioService;
+    private final FactoryCatalog factoryCatalog;
 
     @GetMapping
     public List<ItemResponseDTO> listar() {
@@ -59,23 +65,19 @@ public class ItemController {
     @PostMapping
     public ResponseEntity<ItemResponseDTO> criar(@Valid @RequestBody ItemRequestDTO dto) {
         // TODO: mover para ItemService
-        Item item = new Item();
-        item.setTitulo(dto.titulo());
-        item.setDescricao(dto.descricao());
-        item.setCategoria(CategoriaItem.valueOf(dto.categoria()));
-
-        Item salvo = itemService.criar(item, dto.usuarioId());
+        Usuario proprietario = usuarioService.buscarPorId(dto.usuarioId());
+        Item salvo = itemService.criar(factoryCatalog.criar(dto, proprietario), dto.usuarioId());
         return ResponseEntity.status(HttpStatus.CREATED).body(ItemResponseDTO.fromEntity(salvo));
     }
 
-    @PutMapping("/{id}")
-    public ItemResponseDTO atualizar(@PathVariable Long id, @Valid @RequestBody ItemRequestDTO dto) {
-        Item dadosAtualizados = new Item();
-        dadosAtualizados.setTitulo(dto.titulo());
-        dadosAtualizados.setDescricao(dto.descricao());
+    // @PutMapping("/{id}")
+    // public ItemResponseDTO atualizar(@PathVariable Long id, @Valid @RequestBody ItemRequestDTO dto) {
+    //     Item dadosAtualizados = new Item();
+    //     dadosAtualizados.setTitulo(dto.titulo());
+    //     dadosAtualizados.setDescricao(dto.descricao());
 
-        return ItemResponseDTO.fromEntity(itemService.atualizar(id, dadosAtualizados, dto.usuarioId()));
-    }
+    //     return ItemResponseDTO.fromEntity(itemService.atualizar(id, dadosAtualizados, dto.usuarioId()));
+    // }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> remover(@PathVariable Long id) {
