@@ -4,12 +4,20 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import com.trokr.event.TrocaFinalizadaEvent;
+import com.trokr.notification.NotificacaoPort;
+// import com.trokr.service.LogEventoService;
 
-@Component 
+import lombok.RequiredArgsConstructor;
+
+@Component
+@RequiredArgsConstructor 
 public class EnviarEmailListener {
-    
-    @EventListener 
-    public void aoFinalizarTroca(TrocaFinalizadaEvent evento) {
-        System.out.println("O usuário " + evento.getUsuarioA().getNome() + " finalizou a troca de id: " + evento.getPropostaId());
+
+    private final NotificacaoPort notificacaoPort;
+    // private final LogEventoService logEventoService;
+
+    @EventListener
+    public void enviarConfirmacao(TrocaFinalizadaEvent evento) {
+        notificacaoPort.notificar(evento.getUsuarioA().getId(), "---------------------------troca finalizada-------------------------");
     }
 }

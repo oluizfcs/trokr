@@ -33,19 +33,19 @@ echo "==> 2. Criando itens com categorias diferentes..."
 # A oferece PRODUTO (vale 1 créditos)
 RESP_ITEM_A=$(curl -s -f -X POST "$BASE_URL/itens" \
   -H "Content-Type: application/json" \
-  -d "{\"titulo\": \"Item A (Produto)\", \"descricao\": \"Oferecido por A\", \"usuarioId\": $ID_A, \"categoria\": \"PRODUTO\"}")
+  -d "{\"titulo\": \"Item A (Produto)\", \"descricao\": \"Oferecido por A\", \"usuarioId\": $ID_A, \"categoria\": \"SERVICO\", \"duracaoMinutos\": 90}")
 ITEM_A=$(echo "$RESP_ITEM_A" | jq -r '.id')
 
 # B oferece SERVICO (vale 2 créditos)
 RESP_ITEM_B=$(curl -s -f -X POST "$BASE_URL/itens" \
   -H "Content-Type: application/json" \
-  -d "{\"titulo\": \"Item B (Serviço)\", \"descricao\": \"Oferecido por B\", \"usuarioId\": $ID_B, \"categoria\": \"SERVICO\"}")
+  -d "{\"titulo\": \"Item B (Serviço)\", \"descricao\": \"Oferecido por B\", \"usuarioId\": $ID_B, \"categoria\": \"SERVICO\", \"duracaoMinutos\": 150}")
 ITEM_B=$(echo "$RESP_ITEM_B" | jq -r '.id')
 
 # C oferece EXPERIENCIA (vale 3 créditos)
 RESP_ITEM_C=$(curl -s -f -X POST "$BASE_URL/itens" \
   -H "Content-Type: application/json" \
-  -d "{\"titulo\": \"Item C (Experiência)\", \"descricao\": \"Oferecido por C\", \"usuarioId\": $ID_C, \"categoria\": \"EXPERIENCIA\"}")
+  -d "{\"titulo\": \"Item C (Experiência)\", \"descricao\": \"Oferecido por C\", \"usuarioId\": $ID_C, \"categoria\": \"SERVICO\", \"duracaoMinutos\": 90}")
 ITEM_C=$(echo "$RESP_ITEM_C" | jq -r '.id')
 
 echo "    Item A (PRODUTO - 1 créditos): id=$ITEM_A"
@@ -58,16 +58,16 @@ RESP_RAIZ_1=$(curl -s -f -X POST "$BASE_URL/propostas" \
   -d "{\"usuarioId\": $ID_A, \"itemId\": $ITEM_A, \"descricao\": \"Descrição item $ITEM_A\"}")
 RAIZ_1=$(echo "$RESP_RAIZ_1" | jq -r '.id')
 
-curl -s -f "$BASE_URL/propostas/$RAIZ_1/enviar" >/dev/null
-curl -s -f "$BASE_URL/propostas/$RAIZ_1/aprovar" >/dev/null
+curl -s -f -X POST "$BASE_URL/propostas/$RAIZ_1/enviar" >/dev/null
+curl -s -f -X POST "$BASE_URL/propostas/$RAIZ_1/aprovar" >/dev/null
 
 RESP_CONTRA_1=$(curl -s -f -X POST "$BASE_URL/propostas" \
   -H "Content-Type: application/json" \
   -d "{\"usuarioId\": $ID_B, \"itemId\": $ITEM_B, \"propostaId\": \"$RAIZ_1\", \"descricao\": \"tanto faz\"}")
 CONTRA_1=$(echo "$RESP_CONTRA_1" | jq -r '.id')
 
-curl -s -f "$BASE_URL/propostas/$CONTRA_1/enviar" >/dev/null
-curl -s -f "$BASE_URL/propostas/$RAIZ_1/selecionar/$CONTRA_1" >/dev/null
+curl -s -f -X POST "$BASE_URL/propostas/$CONTRA_1/enviar" >/dev/null
+curl -s -f -X POST "$BASE_URL/propostas/$RAIZ_1/selecionar/$CONTRA_1" >/dev/null
 
 echo "    Negociação 1 pronta em NEGOCIADO: Raiz=$RAIZ_1 (Usuário A), Contraproposta=$CONTRA_1 (Usuário B)"
 
@@ -77,16 +77,16 @@ RESP_RAIZ_2=$(curl -s -f -X POST "$BASE_URL/propostas" \
   -d "{\"usuarioId\": $ID_C, \"itemId\": $ITEM_C, \"descricao\": \"Descrição item $ITEM_C\"}")
 RAIZ_2=$(echo "$RESP_RAIZ_2" | jq -r '.id')
 
-curl -s -f "$BASE_URL/propostas/$RAIZ_2/enviar" >/dev/null
-curl -s -f "$BASE_URL/propostas/$RAIZ_2/aprovar" >/dev/null
+curl -s -f -X POST "$BASE_URL/propostas/$RAIZ_2/enviar" >/dev/null
+curl -s -f -X POST "$BASE_URL/propostas/$RAIZ_2/aprovar" >/dev/null
 
 RESP_CONTRA_2=$(curl -s -f -X POST "$BASE_URL/propostas" \
   -H "Content-Type: application/json" \
   -d "{\"usuarioId\": $ID_A, \"itemId\": $ITEM_A, \"propostaId\": $RAIZ_2, \"descricao\": \"Descrição item $ITEM_A\"}")
 CONTRA_2=$(echo "$RESP_CONTRA_2" | jq -r '.id')
 
-curl -s -f "$BASE_URL/propostas/$CONTRA_2/enviar" >/dev/null
-curl -s -f "$BASE_URL/propostas/$RAIZ_2/selecionar/$CONTRA_2" >/dev/null
+curl -s -f -X POST "$BASE_URL/propostas/$CONTRA_2/enviar" >/dev/null
+curl -s -f -X POST "$BASE_URL/propostas/$RAIZ_2/selecionar/$CONTRA_2" >/dev/null
 
 echo "    Negociação 2 pronta em NEGOCIADO: Raiz=$RAIZ_2 (Usuário C), Contraproposta=$CONTRA_2 (Usuário A)"
 
