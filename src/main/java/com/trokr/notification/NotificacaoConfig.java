@@ -8,14 +8,23 @@ import com.trokr.service.LogEventoService;
 
 @Configuration
 public class NotificacaoConfig {
-    @Bean
-    @Primary
-    public NotificacaoPort notificacaoPort(NotificacaoSimuladaAdapter adaptador,
-            NotificacaoProperties props, LogEventoService logEventoService) {
+
+    @Bean @Primary
+    public NotificacaoPort notificacaoPort(
+        NotificacaoSimuladaAdapter adaptador,
+        NotificacaoProperties props,
+        LogEventoService logEventoService
+    ) {
         // de fora para dentro: retry -> disjuntor -> adaptador
         return new NotificacaoComRetry(
-                new NotificacaoComDisjuntor(adaptador, props.limiteFalhas(),
-                        props.tempoAberto(), logEventoService),
-                props.maxTentativas(), props.esperaInicialMs());
+            new NotificacaoComDisjuntor(
+                adaptador,
+                props.getLimiteFalhas(),
+                props.getTempoAbertoDisjuntor(),
+                logEventoService
+            ),
+            props.getMaxTentativas(),
+            props.getEsperaInicialRetentativaMs()
+        );
     }
 }

@@ -37,7 +37,14 @@ management:
 
 trokr:
   demo:
-    atraso-ms: ${TROKR_DEMO_ENDPOINTS:true} 
+    atraso-ms: ${TROKR_DEMO_ENDPOINTS:true}
+  notificacao:
+    taxa-falha: 0.3
+    latencia-ms: 150
+    espera-inicial-retentativa-ms: 200
+    max-tentativas: 3
+    tempo-aberto-disjuntor: 30s
+    limite-falhas: 5
 
 springdoc:
   api-docs:

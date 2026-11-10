@@ -11,13 +11,18 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor 
-public class EnviarEmailListener {
+public class NotificarUsuarioListener {
 
     private final NotificacaoPort notificacaoPort;
     // private final LogEventoService logEventoService;
 
     @EventListener
     public void enviarConfirmacao(TrocaFinalizadaEvent evento) {
-        notificacaoPort.notificar(evento.getUsuarioA().getId(), "---------------------------troca finalizada-------------------------");
+
+        // TODO: melhorar mensagem de troca e conferir se ambos os usuarios recebem
+        String mensagem = "Troca finalizada entre " + evento.getUsuarioA().getNome() + " e " + evento.getUsuarioB().getNome(); 
+        
+        // TODO: slide 16 aula 13
+        notificacaoPort.notificar(evento.getUsuarioA().getId(), mensagem);
     }
 }

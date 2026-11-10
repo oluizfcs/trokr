@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.trokr.notification.NotificacaoSimulacao;
+import com.trokr.notification.SimulacaoNotificacao;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor 
 @ConditionalOnProperty (name = "trokr.demo.endpoints", havingValue = "true")
 public class DemoNotificacaoController {
-    private final NotificacaoSimulacao simulacao;
+    private final SimulacaoNotificacao simulacao;
 
     @PatchMapping ("/fora-do-ar")
     public void derrubar() { simulacao.derrubar(); }
