@@ -2,14 +2,38 @@ package com.trokr.notification;
 
 import java.time.Duration;
 
-public class NotificacaoProperties {
-    public int esperaInicialMs = 200;
-    public int maxTentativas = 3;
-    public Duration tempoAberto = Duration.ofSeconds(30);
-    public int limiteFalhas = 5;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-    public int esperaInicialMs() {return esperaInicialMs;}
-    public int maxTentativas() {return maxTentativas;}
-    public Duration tempoAberto() {return tempoAberto;}
-    public int limiteFalhas() {return limiteFalhas;}
+import lombok.Getter;
+
+@Getter
+@Component
+public class NotificacaoProperties {
+
+    // simulando perda de pacotes
+    private float taxaFalha;
+    private int latenciaMs;
+
+    // retry
+    private int esperaInicialRetentativaMs;
+    private int maxTentativas;
+
+    // disjuntor
+    private Duration tempoAbertoDisjuntor;
+    private int limiteFalhas;
+
+    public NotificacaoProperties(
+        @Value("${trokr.notificacao.taxa-falha:0}") float taxaFalha,
+        @Value("${trokr.notificacao.latencia-ms:0}") int latenciaMs,
+        @Value("${trokr.notificacao.espera-inicial-retentativa-ms:200}") int esperaInicialRetentativaMs,
+        @Value("${trokr.notificacao.max-tentativas:3}") int maxTentativas,
+        @Value("${trokr.notificacao.tempoAbertoDisjuntor:30s}") Duration tempoAbertoDisjuntor,
+        @Value("${trokr.notificacao.limite-falhas:5}") int limiteFalhas
+    ) {
+        this.taxaFalha = taxaFalha;
+        this.latenciaMs = latenciaMs;
+        this.esperaInicialRetentativaMs = esperaInicialRetentativaMs;
+        this.maxTentativas = maxTentativas;
+    }
 }

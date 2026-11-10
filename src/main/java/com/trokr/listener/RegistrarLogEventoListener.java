@@ -36,4 +36,11 @@ public class RegistrarLogEventoListener {
             evento.getUsuarioA().getId()
         );
     }
+
+    /* TODO:
+        Se o projeto já tem um GlobalExceptionHandler (Aula 11
+        formaliza isso), esse é o lugar natural para chamar
+        registrarErro() — capturando exceções não tratadas
+        antes de devolver a resposta HTTP.
+    */
 }

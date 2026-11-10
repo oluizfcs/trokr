@@ -18,9 +18,10 @@ public class NotificacaoComDisjuntor implements NotificacaoPort {
     private int falhasSeguidas = 0;
     private Instant abertoAte = null;
 
+    // TODO: testar antes de implementar estado meio aberto
     @Override
     public synchronized void notificar(Long usuarioId, String mensagem) {
-        if (abertoAte != null) { // ABERTO
+        if (abertoAte != null) { // ABERTO (notificações não são enviadas)
             registrarPendente(usuarioId, mensagem);
             return;
         }
@@ -44,7 +45,4 @@ public class NotificacaoComDisjuntor implements NotificacaoPort {
             log.error("Não foi possível registrar a pendência", ex);
         }
     }
-    // NotificacaoProperties ganha: int limiteFalhas, Duration tempoAberto
-    // application.yml: trokr.notificacao.limite-falhas: 5
-    // trokr.notificacao.tempo-aberto: 30s
 }

@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.springframework.stereotype.Component;
 
 @Component
-public class NotificacaoSimulacao {
+public class SimulacaoNotificacao {
     private final AtomicBoolean foraDoAr = new AtomicBoolean(false);
 
     public boolean foraDoAr() { return foraDoAr.get(); };

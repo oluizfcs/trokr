@@ -2,21 +2,31 @@ package com.trokr.notification;
 
 import org.springframework.stereotype.Component;
 
-import lombok.RequiredArgsConstructor;
+import com.trokr.config.AtrasoDemo;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class NotificacaoSimuladaAdapter implements NotificacaoPort {
 
-    public final NotificacaoSimulacao simulacao;
+    private final NotificacaoProperties props;
+    public final SimulacaoNotificacao simulacao;
 
     @Override
     public void notificar(Long usuarioId, String mensagem) {
         if (simulacao.foraDoAr()) {
-            System.out.println("Serviço de notifcação fora do ar");
             throw new NotificacaoIndisponivelException("Serviço de notificação fora do ar");
         }
-        System.out.println(mensagem);
+
+        new AtrasoDemo(props.getLatenciaMs()).aplicar();
+
+        if(Math.random() < props.getTaxaFalha()) {
+            throw new NotificacaoIndisponivelException("Notificação falhou. chance: " + props.getTaxaFalha() * 100 + "%");
+        }
+
+        log.info("Notificação enviada com sucesso para {}", usuarioId);
     }
-    
 }

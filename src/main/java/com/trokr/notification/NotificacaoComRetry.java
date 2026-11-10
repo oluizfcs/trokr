@@ -5,7 +5,9 @@ import org.springframework.stereotype.Component;
 import com.trokr.config.AtrasoDemo;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor 
 public class NotificacaoComRetry implements NotificacaoPort {
@@ -23,7 +25,7 @@ public class NotificacaoComRetry implements NotificacaoPort {
                 return;
             } catch (NotificacaoIndisponivelException ex) {
                 if (tentativa >= maxTentativas) throw ex;
-                System.out.println("Tentativa " + tentativa + " para " + usuarioId + " falhou");
+                log.warn("Tentativa {} para {} falhou. Nova tentativa em {} ms", tentativa, usuarioId, espera);
                 new AtrasoDemo(espera).aplicar();
                 espera *= 2;
             }
