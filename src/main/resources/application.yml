@@ -38,3 +38,13 @@ management:
 trokr:
   demo:
     atraso-ms: ${TROKR_DEMO_ENDPOINTS:true} 
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs # a especificação em JSON
+  swagger-ui:
+    path: /swagger-ui.html # a tela
+    tags-sorter: alpha # grupos em ordem alfabética
+    operations-sorter: method # dentro do grupo, por método HTTP
+    try-it-out-enabled: true # já abre com o "Try it out" ativo
+    display-request-duration: true # tempo de cada requisição
