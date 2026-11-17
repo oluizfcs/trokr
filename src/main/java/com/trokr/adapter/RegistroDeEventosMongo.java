@@ -29,6 +29,13 @@ public class RegistroDeEventosMongo implements RegistroDeEventos {
     }
 
     public List<Object> buscarPorTipo(String tipo) {
-        return logEventoRepository.findByTipo(tipo).stream().map(e -> (Object) e).toList();
+        List<LogEvento> list = null;
+        if(tipo.isEmpty()) {
+            list = logEventoRepository.findAll();
+        } else {
+            list = logEventoRepository.findByTipo(tipo);
+        }
+
+        return list.stream().map(e -> (Object) e).toList();
     }
 }

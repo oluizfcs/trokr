@@ -20,7 +20,7 @@ public class LogEventoController {
     private final LogEventoService logEventoService;
 
     @GetMapping 
-    public List<LogEventoResponseDTO> listarPorTipo(@RequestParam String tipo) {
+    public List<LogEventoResponseDTO> listarPorTipo(@RequestParam(defaultValue = "") String tipo) {
         List<LogEvento> eventos = logEventoService.buscarPorTipo(tipo);
         return eventos.stream().map(LogEventoResponseDTO::fromDocumento).toList();
     }
