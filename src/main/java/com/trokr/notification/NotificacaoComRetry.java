@@ -22,7 +22,7 @@ public class NotificacaoComRetry implements NotificacaoPort {
                 return;
             } catch (NotificacaoIndisponivelException ex) {
                 if (tentativa >= maxTentativas) throw ex;
-                log.warn("Tentativa {} para {} falhou. Nova tentativa em {} ms", tentativa, usuarioId, espera);
+                log.warn("Tentativa {} para {} falhou ({}). Nova tentativa em {} ms", tentativa, usuarioId, ex.getMessage(), espera);
                 new AtrasoDemo(espera).aplicar();
                 espera *= 2;
             }

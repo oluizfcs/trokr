@@ -35,5 +35,7 @@ public class NotificacaoProperties {
         this.latenciaMs = latenciaMs;
         this.esperaInicialRetentativaMs = esperaInicialRetentativaMs;
         this.maxTentativas = maxTentativas;
+        this.tempoAbertoDisjuntor = tempoAbertoDisjuntor;
+        this.limiteFalhas = limiteFalhas;
     }
 }

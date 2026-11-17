@@ -27,13 +27,34 @@ public class LogEventoService {
             usuarioId
         );
     }
+
+    public void registrarWarn(String tipo, String origem, Map<String, Object> payload, Long usuarioId, Exception ex) {
+        payload.put("getMessage()", ex.getMessage());
+
+        registroDeEventosMongo.registrar(
+            tipo,
+            NivelEvento.WARN,
+            origem,
+            payload,
+            LocalDateTime.now(),
+            usuarioId
+        );
+    }
     
-    public void registrarErro(String origem, String mensagem, Exception excecao) {
-        // TODO: montar LogEvento com nivel ERROR, payload
-        // contendo a mensagem da exceção, e salvar
+    public void registrarErro(String tipo, String origem, Map<String, Object> payload, Long usuarioId, Exception ex) {
+        payload.put("getMessage()", ex.getMessage());
+
+        registroDeEventosMongo.registrar(
+            tipo,
+            NivelEvento.ERROR,
+            origem,
+            payload,
+            LocalDateTime.now(),
+            usuarioId
+        );
     }
 
-    public List<LogEvento> buscarPorTipo(String tipo) {
-        return registroDeEventosMongo.buscarPorTipo(tipo).stream().map(e -> (LogEvento) e).toList();
+    public List<LogEvento> buscar(String tipo, String nivel) {
+        return registroDeEventosMongo.buscar(tipo, nivel).stream().map(e -> (LogEvento) e).toList();
     }
 }

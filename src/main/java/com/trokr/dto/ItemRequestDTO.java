@@ -2,7 +2,6 @@ package com.trokr.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 
 /**
  * Dados de entrada para criar/atualizar um Item.

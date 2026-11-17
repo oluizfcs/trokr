@@ -2,6 +2,8 @@ package com.trokr.notification;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.trokr.service.LogEventoService;
 
@@ -18,18 +20,18 @@ public class NotificacaoComDisjuntor implements NotificacaoPort {
     private int falhasSeguidas = 0;
     private Instant abertoAte = null;
 
-    // TODO: testar antes de implementar estado meio aberto
     @Override
     public synchronized void notificar(Long usuarioId, String mensagem) {
-        if (abertoAte != null) { // ABERTO (notificações não são enviadas)
+        if (abertoAte != null && Instant.now().isBefore(abertoAte)) { // ABERTO (notificações não são enviadas)
             registrarPendente(usuarioId, mensagem);
             return;
         }
+        boolean meioAberto = abertoAte != null;
         try {
             proximo.notificar(usuarioId, mensagem);
             falhasSeguidas = 0;
         } catch (NotificacaoIndisponivelException ex) {
-            if (++falhasSeguidas >= limiteFalhas) {
+            if (meioAberto || ++falhasSeguidas >= limiteFalhas) {
                 abertoAte = Instant.now().plus(tempoAberto);
                 log.warn("Disjuntor ABERTO até {}", abertoAte);
             }
@@ -40,7 +42,9 @@ public class NotificacaoComDisjuntor implements NotificacaoPort {
     private void registrarPendente(Long usuarioId, String mensagem) {
         log.warn("Disjuntor aberto: notificação para o usuário {} ficou pendente", usuarioId);
         try {
-            logEventoService.registrarInfo("NOTIFICACAO_PENDENTE", this.getClass().getName(), null, usuarioId);
+            Map<String, Object> payload = new HashMap<>();
+            payload.put("notificacao", mensagem);
+            logEventoService.registrarInfo("NOTIFICACAO_PENDENTE", this.getClass().getName(), payload, usuarioId);
         } catch (Exception ex) {
             log.error("Não foi possível registrar a pendência", ex);
         }

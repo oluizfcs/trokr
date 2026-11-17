@@ -20,10 +20,8 @@ public class LogEventoController {
     private final LogEventoService logEventoService;
 
     @GetMapping 
-    public List<LogEventoResponseDTO> listarPorTipo(@RequestParam(defaultValue = "") String tipo) {
-        List<LogEvento> eventos = logEventoService.buscarPorTipo(tipo);
+    public List<LogEventoResponseDTO> listarPorTipo(@RequestParam(defaultValue = "") String tipo, @RequestParam(defaultValue = "") String nivel) {
+        List<LogEvento> eventos = logEventoService.buscar(tipo, nivel);
         return eventos.stream().map(LogEventoResponseDTO::fromDocumento).toList();
     }
-
-    // TODO: listar por tipo, nível, timestamp, etc.
 }

@@ -9,5 +9,8 @@ import com.trokr.model.NivelEvento;
 
 public interface LogEventoRepository extends MongoRepository<LogEvento, String> {
     List<LogEvento> findByTipo(String tipo);
+    List<LogEvento> findByNivel(String nivel);
+    // TODO: fix
+    List<LogEvento> findByTipoLikeOrNivelLike(String tipo, String nivel);
     List<LogEvento> findByNivelAndTimestampBetween(NivelEvento nivel, LocalDateTime inicio, LocalDateTime fim);
 }

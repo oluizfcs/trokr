@@ -16,5 +16,5 @@ public interface RegistroDeEventos {
         Long usuarioId
     );
 
-    List<Object> buscarPorTipo(String tipo);
+    List<Object> buscar(String tipo, String nivel);
 }
